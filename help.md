@@ -81,3 +81,66 @@ Ainsi, l'utilisateur peut passer à la ligne dans le textarea en appuyant sur "E
 Dans cet exemple, nous utilisons Vue.js pour gérer le textarea et les événements. Lorsque l'utilisateur appuie sur "Entrée" dans le textarea, l'événement est intercepté par `@keydown.enter.prevent="addNewLine"` pour ajouter un saut de ligne à la valeur du textarea, et `@submit.prevent="submitForm"` empêche la soumission du formulaire par défaut.
 
 Assurez-vous d'inclure la bibliothèque Vue.js dans votre projet, comme indiqué dans la balise `<script>`.
+
+### Recherche pour Axel
+
+Bien sûr, voici un exemple d'un tableau avec une liste de lignes cliquables en utilisant Vue.js. Dans cet exemple, chaque ligne du tableau est une entrée cliquable qui affiche une alerte lorsque vous cliquez dessus :
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tableau avec des lignes cliquables en Vue.js</title>
+</head>
+<body>
+  <div id="app">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in items" :key="item.id" @click="showAlert(item.name)">
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>
+            <button @click.stop="editItem(item.id)">Editer</button>
+            <button @click.stop="deleteItem(item.id)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        items: [
+          { id: 1, name: 'Article 1' },
+          { id: 2, name: 'Article 2' },
+          { id: 3, name: 'Article 3' },
+        ],
+      },
+      methods: {
+        showAlert(name) {
+          alert('Vous avez cliqué sur : ' + name);
+        },
+        editItem(id) {
+          alert('Édition de l'élément avec l'ID : ' + id);
+        },
+        deleteItem(id) {
+          alert('Suppression de l'élément avec l'ID : ' + id);
+        },
+      },
+    });
+  </script>
+</body>
+</html>
+```
+
+Dans cet exemple, nous utilisons Vue.js pour générer le tableau et gérer les événements. Chaque ligne du tableau est générée à partir des données stockées dans `items`, et en cliquant sur une ligne, la méthode `showAlert` est appelée pour afficher une alerte avec le nom de l'élément correspondant. De plus, chaque ligne a des boutons "Éditer" et "Supprimer" qui déclenchent également des alertes. Vous pouvez personnaliser les actions à effectuer lorsque vous cliquez sur une ligne ou un bouton en modifiant les méthodes correspondantes.
