@@ -144,3 +144,42 @@ Bien sûr, voici un exemple d'un tableau avec une liste de lignes cliquables en 
 ```
 
 Dans cet exemple, nous utilisons Vue.js pour générer le tableau et gérer les événements. Chaque ligne du tableau est générée à partir des données stockées dans `items`, et en cliquant sur une ligne, la méthode `showAlert` est appelée pour afficher une alerte avec le nom de l'élément correspondant. De plus, chaque ligne a des boutons "Éditer" et "Supprimer" qui déclenchent également des alertes. Vous pouvez personnaliser les actions à effectuer lorsque vous cliquez sur une ligne ou un bouton en modifiant les méthodes correspondantes.
+
+### Pour Nicole
+
+Voici un exemple d'un champ `input` de type `number` en Vue.js qui empêche la saisie d'une valeur inférieure à 5 et qui a une note minimum de 5 :
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Champ input de type number avec note minimum en Vue.js</title>
+</head>
+<body>
+  <div id="app">
+    <label for="note">Note (minimum 5) :</label>
+    <input type="number" id="note" v-model.number="userNote" @input="validateNote" min="5">
+    <p v-if="userNote < 5" style="color: red;">La note ne peut pas être inférieure à 5.</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        userNote: 5,
+      },
+      methods: {
+        validateNote() {
+          if (this.userNote < 5) {
+            this.userNote = 5; // Réinitialise à 5 si la valeur est inférieure
+          }
+        },
+      },
+    });
+  </script>
+</body>
+</html>
+```
+
+Dans cet exemple, nous utilisons `v-model.number` pour lier la valeur de l'`input` à la variable `userNote` en tant que nombre. L'attribut `min="5"` est également utilisé pour définir la note minimale à 5. Si l'utilisateur essaie de saisir une note inférieure à 5, une validation est effectuée dans la méthode `validateNote`, qui réinitialise la valeur à 5. Une alerte d'erreur est affichée en rouge si la note est inférieure à 5 grâce à la directive `v-if`.
