@@ -139,3 +139,106 @@ export default {
 ```
 
 N'oubliez pas d'adapter ce code en fonction de votre stack technologique, de vos bibliothèques et de vos composants spécifiques. Le principe de base est d'afficher un pop-up de confirmation personnalisé lorsque l'utilisateur souhaite supprimer un élément, puis d'exécuter l'action de suppression ou de l'annuler en fonction de la réponse de l'utilisateur.
+
+
+###  Autre Recherche 
+
+## Première generate
+Pour calculer la moyenne en pourcentage en fonction du nombre de réponses correctes par rapport au nombre total de réponses possibles, vous pouvez utiliser la méthode suivante. Tout d'abord, assurez-vous que vous avez déjà stocké le nombre de réponses correctes (dans `finalNotes`) et le nombre total de questions (dans `tab`) dans votre composant. Ensuite, créez une nouvelle méthode `calculatePercentage` pour effectuer le calcul de la moyenne en pourcentage :
+
+```javascript
+methods: {
+  addAnswers(possible_answer, i, question, u) {
+    this.moyenne(possible_answer, i);
+    this.tab[i] = { quest: question.text, index: u };
+    this.selectedChoices[i] = {
+      'id': this.userAnswer.id,
+      'possible_answer_id': possible_answer.id,
+      'question_id': question.id,
+      'intern_user_id': 0,
+      'extern_user_id': 0,
+      'quiz_id': this.userAnswer.quiz_id,
+      'user_note_id': this.userNote.id,
+    };
+    this.answersStocker.setItem('selectedChoices', JSON.stringify(this.selectedChoices));
+    this.answersStocker.setItem('tab', JSON.stringify(this.tab));
+    this.userAnswer.id = uuid();
+
+    // Après avoir ajouté une réponse, calculez la moyenne en pourcentage
+    this.calculatePercentage();
+  },
+  moyenne(possible_answer, i) {
+    if (possible_answer.state === 1) {
+      this.notes[i] = 1;
+    } else {
+      this.notes[i] = 0;
+    }
+    this.finalNotes = this.notes.filter(el => el === 1).length;
+    this.answersStocker.setItem('finalNotes', JSON.stringify(this.finalNotes));
+  },
+  calculatePercentage() {
+    // Nombre total de questions
+    const totalQuestions = this.tab.length;
+    // Nombre de réponses correctes
+    const correctAnswers = this.finalNotes;
+
+    // Calcul de la moyenne en pourcentage
+    if (totalQuestions > 0) {
+      const percentage = (correctAnswers / totalQuestions) * 100;
+      this.averagePercentage = percentage;
+      this.answersStocker.setItem('averagePercentage', JSON.stringify(percentage));
+    } else {
+      this.averagePercentage = 0; // Éviter la division par zéro
+      this.answersStocker.setItem('averagePercentage', JSON.stringify(0));
+    }
+  },
+}
+```
+
+Avec cette méthode `calculatePercentage`, vous obtiendrez la moyenne en pourcentage en fonction du nombre de réponses correctes par rapport au nombre total de questions. Le résultat sera stocké dans `averagePercentage`. Assurez-vous de l'appeler chaque fois que vous ajoutez une réponse en utilisant `addAnswers`.
+
+## Second generate
+
+Pour calculer la moyenne d'un utilisateur en fonction du nombre de quiz et l'afficher en pourcentage, vous pouvez utiliser une approche basée sur le total des notes obtenues et le nombre total de questions posées. Vous pouvez ajouter une fonction pour calculer la moyenne et mettre à jour l'affichage. Voici comment vous pourriez le faire :
+
+```javascript
+data() {
+  return {
+    // Autres données de votre composant
+    totalQuestions: 0, // Le nombre total de questions
+    totalNotes: 0,    // Le nombre total de réponses correctes
+  };
+},
+methods: {
+  addAnswers(possible_answer, i, question, u) {
+    // ... (votre code actuel) ...
+
+    // Mettre à jour le nombre total de questions
+    this.totalQuestions = this.tab.length;
+
+    // Calculer la moyenne
+    this.calculateAverage();
+  },
+  moyenne(possible_answer, i) {
+    // ... (votre code actuel) ...
+
+    // Mettre à jour le nombre total de réponses correctes
+    this.totalNotes = this.finalNotes;
+  },
+  calculateAverage() {
+    // Éviter la division par zéro
+    if (this.totalQuestions === 0) {
+      this.average = 0;
+    } else {
+      // Calcul de la moyenne en pourcentage
+      this.average = (this.totalNotes / this.totalQuestions) * 100;
+    }
+  },
+},
+```
+
+Dans ce code, nous avons ajouté une variable `totalQuestions` pour suivre le nombre total de questions et une variable `totalNotes` pour suivre le nombre total de réponses correctes. À chaque fois que vous ajoutez une réponse à l'utilisateur, le nombre total de questions est mis à jour. La méthode `calculateAverage` est appelée pour recalculer la moyenne en pourcentage.
+
+La moyenne est calculée en divisant le nombre total de réponses correctes par le nombre total de questions et en multipliant par 100 pour obtenir le pourcentage. Le résultat est stocké dans la variable `average`.
+
+N'oubliez pas d'adapter ce code à votre application, en tenant compte de la structure de vos données et des besoins spécifiques de votre projet.
